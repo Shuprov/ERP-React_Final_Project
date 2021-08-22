@@ -7,6 +7,7 @@ use App\Http\Controllers\shopsController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\contactController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\API\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 });
 
+//rasel
 Route ::post('/registation', [UserController::class, 'store']);
 Route ::post('/contact', [contactController::class, 'message_api']);
 Route ::post('/contact1', [shopsController::class, 'refand_api']);
@@ -37,7 +39,7 @@ Route::get('/dashboard', [dashboardController::class, 'api_productslist']);
 
 
 
-
+//suprov
 Route::post('/add-user',[UserController::class,'store']);
 Route::get('users',[UserController::class,'index']);
 Route::get('/edit-user/{id}',[UserController::class,'edit']);
@@ -50,3 +52,11 @@ Route::get('/edit-product/{id}',[ProductController::class,'edit']);
 Route::put('update-product/{id}',[ProductController::class,'update']);
 Route::delete('delete-product/{id}',[ProductController::class,'destroy']);
 
+
+//ridowan
+
+Route::get('students', [StudentController::class, 'index']);
+Route::post('/add-student', [StudentController::class, 'store']);
+Route::get('/edit-student/{id}', [StudentController::class, 'edit']);
+Route::put('update-student/{id}', [StudentController::class, 'update']);
+Route::delete('delete-student/{id}', [StudentController::class, 'destroy']);

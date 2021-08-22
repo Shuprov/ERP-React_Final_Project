@@ -38,7 +38,15 @@ function App() {
 	<Route path="/view-product" component={Product} />
 	<Route path="/add-product" component={Addproduct} />
 	<Route path="/edit-product/:id" component={Editproduct} />
+
+
+// Ridowan ahad
+  <Route exact path="/" component={Student}/>
+  <Route path="/add-student" component={Addstudent}/>
+  <Route path="/edit-student/:id" component={Editstudent}/>
+
     </div>
+
      
     </Router>
   
