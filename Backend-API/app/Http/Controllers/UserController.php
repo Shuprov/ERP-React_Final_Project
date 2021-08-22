@@ -3,135 +3,114 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
-use App\Http\Requests\UserRequest;
-use App\Http\Requests\UserLogin;
-use App\Models\room;
-use Carbon\carbon;
 use Validator;
-
-
-
+use App\Models\User_Table;
 
 class UserController extends Controller
 {
-    // <start login page>...
-    public function log()
-    {
-        return view('customer.login');
-    }
-    //api
-    public function customerview()
-    {
-        $registation = Registation::all();
-        return response()->json([
-            
-            'status' => 200,
-            'registation' =>$registation,
-        ]);
-    }
-     /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('registation');
-    }
+    //
+    public function index(Request $req){
+        /*$users=[
+            [1,'shuprov','123','asif@gmail.com','admin'],
+            [1,'ab','12345','as@gmail.com','user'],
+            [1,'xyz','12','axy@gmail.com','user']
 
-    public function loginVerify(UserLogin $req)
-    {
-        // $req->validate([
-        //     'register_id'=>'required',
-        //     'register_password'=>'required'
-        //  ]);
+        ]; indexed array */
+        // $users=[
+        //     ['id'=>1,'username'=>'shuprov','password'=>'123','email'=>'asif@gmail.com','role'=>'admin'],
+        //     ['id'=>2,'username'=>'asif','password'=>'1234','email'=>'abc@gmail.com','role'=>'user'],
+        //     ['id'=>3,'username'=>'paul','password'=>'12345','email'=>'xyz@gmail.com','role'=>'user']
 
-        //.......sir <code class="
-        // dd($req->all());
-        $result = DB::table('rooms')
-            ->where('name', $req->register_id)
-            ->where('passwoard', $req->register_password)
-            ->first();
-        // dd($result);
-        //(isset($result->name))
-        if (isset($result)) {
-            $req->session()->put('name', $result->name);
-            $req->session()->put('id', $result->id);
-            //set session or cookie
-            
-            return redirect('/dashboard');
-        } else {
-            $req->session()->flash('msg', 'Invalid username or password!');
+        // ];
+        // if($req->session()->has('email')){
+        //     $users=$this->getUserList();
+        //     return view('userlist')->with('userlist',$users);
+        // }
+        if($req->session()->has('email')){
+            $users= User_Table::all();
+            return view('userlist')->with('userlist',$users);
+        }
+        else{
+            $req->session()->flash('msg','Invalid request');
             return redirect('/login');
         }
-        //-----sir code end
 
-    }
-    // <end start login page>...
-    //start register page work..............
-    //method
-    public function reg()
-    {
-        return view('customer.register');
-    }
-    //start customer register ....
-    public function store(UserRequest $request)
-    {
-        //insert
-           // return $request->all();
-            $customer = new room();
-            $customer->name  = $request->input('user_name');
-            $customer->address = $request->input('user_address');
-            $customer->dob = $request->input('user_dob');
-            $customer->contact_number = $request->input('user_mob');
-            $customer->email = $request->input('user_email');
-            $customer->passwoard = $request->input('user_password');
-            $customer->save();
-    
-            return response()->json([
-                'status' => 200,
-                'message' => 'Registation form Submitted',
-        ]);
-       
-    }
-    //end customer register...
-    public function loginVerify_api(Request $req)
-    {
-      
-        // dd($req->all());
-        $result = DB::table('rooms')
-            ->where('name', $req->register_id)
-            ->where('passwoard', $req->register_password)
-            ->first();
-        //  dd($result);
-        //(isset($result->name)) Success
         
-        if (isset($result)) {
-           
-            return response()->json([
-                'status' => 200,
-                'message' => 'Success',
-        ]);
-        } else {
-            return response()->json([
-                'status' => 200,
-                'message' => 'Error',
-        ]);
-        }
-       
-
+        // $users=$this->getUserList();
+        //  return view('userlist')->with('userlist',$users);
     }
 
-    //validation
-    public function verify(UserRequest $req)
+    public function verify(Request $req){
+
+    $validation= Validator::make($req->all(),[
+        'username'=>'required|min:5',
+        'password'=>'required|min:5',
+        'email'=>'required|min:5',
+        'role'=>'required|max:5'
+    ]);
+
+    if($validation->fails())
     {
+       // return redirect('/login')->with('errors',$validation->errors());
+        return back()
+        ->with('errors',$validation->errors())
+        ->withInput()
+        ;
 
+    }
+    
+}
 
-        //working validation....
+    public function create(){
+        return view('create');
+    }
+
+    public function edit($id){
+        //echo $id;
+        $user=User_Table::find($id);
+        return view('edit')->with('user',$user);
+    }
+
+    public function update(Request $req,$id){
+        //echo $id;
+        $user=User_Table::find($id);
+        $user->username=$req->username;
+        $user->password=$req->password;
+        $user->email=$req->email;
+        $user->role=$req->role;
+        $user->save();
+
+        return redirect('/user');
 
 
     }
 
-    //end register page work...........
+    public function delete($id){
+        echo $id;
+    }
+
+    public function destroy(Request $req,$id){
+        echo $id;
+    }
+
+    public function getUserList(){
+        return [
+            ['id'=>1,'username'=>'shuprov','password'=>'123','email'=>'asif@gmail.com','role'=>'admin'],
+            ['id'=>2,'username'=>'asif','password'=>'1234','email'=>'abc@gmail.com','role'=>'user'],
+            ['id'=>3,'username'=>'paul','password'=>'12345','email'=>'xyz@gmail.com','role'=>'user']
+
+        ];
+    }
+
+    public function submit(Request $req){
+        $data= $req->all();
+        User_Table::create($data);
+        return redirect ('/user');
+    }
+
+    public function user_delete($id)
+    {
+        User_Table::find($id)->delete();
+        return redirect()->back();
+    }
 }
