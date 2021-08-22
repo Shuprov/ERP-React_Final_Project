@@ -32,3 +32,21 @@ Route::post('/reviewdashboard', [shopsController::class, 'review_api']);
 Route::get('/product', [productController::class, 'api_products']);
 Route::get('/shop', [shopsController::class, 'api_shop']);
 Route::get('/dashboard', [dashboardController::class, 'api_productslist']);
+
+
+
+
+
+
+Route::post('/add-user',[UserController::class,'store']);
+Route::get('users',[UserController::class,'index']);
+Route::get('/edit-user/{id}',[UserController::class,'edit']);
+Route::put('update-user/{id}',[UserController::class,'update']);
+Route::delete('delete-user/{id}',[UserController::class,'destroy']);
+//product
+Route::post('/add-product',[ProductController::class,'store']);
+Route::get('products',[ProductController::class,'index']);
+Route::get('/edit-product/{id}',[ProductController::class,'edit']);
+Route::put('update-product/{id}',[ProductController::class,'update']);
+Route::delete('delete-product/{id}',[ProductController::class,'destroy']);
+

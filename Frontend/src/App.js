@@ -18,7 +18,7 @@ function App() {
     
       <Router>
     <div>
-
+ //Rasel
     <Route exact path="/" component={Home} />
     <Route exact path="/shop" component={AllShop} />
     <Route exact path="/product" component={Product} />
@@ -31,6 +31,13 @@ function App() {
     <Route path="/checkout" component={Checkout} />
     <Route path="/about" component={About} />
     <Route path="/contact" component={Contact} />
+//Asif
+	<Route exact path="/" component={User} />
+	<Route path="/add-user" component={Adduser} />
+	<Route path="/edit-user/:id" component={Edituser} />
+	<Route path="/view-product" component={Product} />
+	<Route path="/add-product" component={Addproduct} />
+	<Route path="/edit-product/:id" component={Editproduct} />
     </div>
      
     </Router>
